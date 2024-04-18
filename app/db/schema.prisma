@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid()) @db.VarChar(64)
+  name       String   @db.VarChar(64)
+  username   String   @unique @db.VarChar(64)
+  role       String   @db.VarChar(32)
+  password   String   @db.VarChar()
+  created_at DateTime @default(now())
+}
+
+model Office {
+  id                String @id @default(uuid()) @db.VarChar(64)
+  name              String @unique @db.VarChar()
+  address           String
+  description       String @db.VarChar()
+  room_duration_min String @db.VarChar(16)
+  room_duration_max String @db.VarChar(16)
+  photo             String
+
+  // relation map
+  rooms        Room[]
+  reservations Reservation[]
+}
+
+model Room {
+  id          String @id @default(uuid()) @db.VarChar(64)
+  name        String @db.VarChar(64)
+  description String @db.VarChar()
+  photo       String
+  office_id   String @db.VarChar(64)
+
+  // relation map
+  office       Office        @relation(fields: [office_id], references: [id])
+  reservations Reservation[]
+}
+
+model Reservation {
+  id              String   @id @default(uuid()) @db.VarChar(64)
+  office_id       String   @db.VarChar(64)
+  date_time_start DateTime
+  date_time_end   DateTime
+  room_id         String   @db.VarChar(64)
+  status          String   @db.VarChar(32)
+
+  // relation map
+  office Office @relation(fields: [office_id], references: [id])
+  room   Room   @relation(fields: [room_id], references: [id])
+}

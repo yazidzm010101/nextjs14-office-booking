@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Cabin, Inter, Lato, Libre_Franklin, Montserrat, Quicksand } from "next/font/google";
+import "./globals.scss";
+import clsx from "clsx";
 
-const inter = Inter({ subsets: ["latin"] });
+const header = Cabin({ subsets: ["latin"], variable: '--font-header' });
+const body = Libre_Franklin({ subsets: ["latin"], weight: '400', variable: '--font-body' });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={clsx(body.variable, header.variable)}>
+        {children}
+      </body>
     </html>
   );
 }

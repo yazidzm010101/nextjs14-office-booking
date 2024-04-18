@@ -1,0 +1,22 @@
+.nav {
+  @apply fixed top-0 left-0 w-[250px] h-full max-w-full px-2 py-2;
+
+  .menu {
+    @apply flex flex-col h-full gap-1.5 px-2 py-2 rounded-xl;
+    @apply bg-slate-50;
+    @apply dark:bg-gray-800;
+
+    .item {
+      @apply flex items-center w-full px-4 py-2 rounded-lg text-sm transition-all duration-200;
+      @apply text-gray-700 hover:bg-slate-200;
+      @apply dark:text-gray-500 dark:hover:bg-gray-700;
+
+      &.active {
+        @apply font-bold text-white outline outline-1;
+        @apply bg-orange-500 outline-orange-600;
+        @apply dark:hover:bg-orange-700 dark:outline-[#ea5a0c0a];
+      }
+    }
+
+  }
+}
