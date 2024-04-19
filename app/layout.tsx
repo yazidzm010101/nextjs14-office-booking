@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cabin, Inter, Lato, Libre_Franklin, Montserrat, Quicksand } from "next/font/google";
 import "./globals.scss";
 import clsx from "clsx";
+import RootState from "./state";
 
 const header = Cabin({ subsets: ["latin"], variable: '--font-header' });
 const body = Libre_Franklin({ subsets: ["latin"], weight: '400', variable: '--font-body' });
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={clsx(body.variable, header.variable)}>
-        {children}
+        <RootState>
+          {children}
+        </RootState>
       </body>
     </html>
   );

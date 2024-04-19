@@ -1,5 +1,9 @@
 .nav {
-  @apply fixed top-0 left-0 w-[250px] h-full max-w-full px-2 py-2;
+  @apply fixed top-0 left-[-250px]  hidden sm:block h-full max-w-full px-2 py-2 w-[250px] transition-all duration-300;
+
+  &.active {
+    @apply left-0
+  }
 
   .menu {
     @apply flex flex-col h-full gap-1.5 px-2 py-2 rounded-xl;
