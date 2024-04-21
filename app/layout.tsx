@@ -1,11 +1,17 @@
-import type { Metadata } from "next";
-import { Cabin, Inter, Lato, Libre_Franklin, Montserrat, Quicksand } from "next/font/google";
-import "./globals.scss";
+import RootState from "@/state";
 import clsx from "clsx";
-import RootState from "./state";
+import "custom-react-scrollbar/dist/style.css";
+import type { Metadata } from "next";
+import { Cabin, Libre_Franklin } from "next/font/google";
+import Body from "./body";
+import "./globals.scss";
 
-const header = Cabin({ subsets: ["latin"], variable: '--font-header' });
-const body = Libre_Franklin({ subsets: ["latin"], weight: '400', variable: '--font-body' });
+const header = Cabin({ subsets: ["latin"], variable: "--font-header" });
+const body = Libre_Franklin({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,12 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={clsx(body.variable, header.variable)}>
-        <RootState>
-          {children}
-        </RootState>
-      </body>
+    <html lang="en" className={clsx(body.variable, header.variable)}>
+      <RootState>
+        <Body>{children}</Body>
+      </RootState>
     </html>
   );
 }

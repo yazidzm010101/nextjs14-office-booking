@@ -1,9 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { capitalize } from "../lib/utils/formatUtils";
-
-const prisma = new PrismaClient();
+import { capitalize } from "../utils/text-utils";
+import prisma from "./prisma";
 
 const users = [
   {
@@ -26,7 +24,8 @@ const offices = [
     name: "Salt & Paper",
     address: "Jl. Perjuangan, Kedoya Center, Kebon Jeruk",
     description: "First & Second Floor",
-    photo: "",
+    photo:
+      "https://www.anchorhockingfoodservice.com/wp-content/uploads/2021/08/16U_Salt-Pepper-1.jpg",
     room_duration_min: "1h",
     room_duration_max: "4h",
   },
@@ -34,7 +33,8 @@ const offices = [
     name: "SALTY",
     address: "Jl. Perjuangan, Kedoya Center, Kebon Jeruk",
     description: "Fourth Floor",
-    photo: "",
+    photo:
+      "https://hips.hearstapps.com/hmg-prod/images/701/salt-2-1518566091.jpg",
     room_duration_min: "1h",
     room_duration_max: "4h",
   },

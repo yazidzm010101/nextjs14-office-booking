@@ -1,4 +1,4 @@
-import getURL from "@/lib/utils/getURL";
+import getURL from "@/utils/text-utils";
 import { writeFile } from "fs/promises";
 import { NextResponse } from "next/server";
 import path from "path";

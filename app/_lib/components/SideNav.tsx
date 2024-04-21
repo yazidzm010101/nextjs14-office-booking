@@ -1,15 +1,14 @@
 'use client'
 
-import React from 'react'
+import className from "@/components/sidenav.module.scss";
+import { useNav } from '@/state/nav-state';
+import { IconCalendar, IconHome, IconSettings } from '@tabler/icons-react';
+import clsx from 'clsx';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import clsx from 'clsx';
-import { IconCalendar, IconHome, IconSettings } from '@tabler/icons-react';
-import className from "./sidenav.module.scss";
-import { useNav } from '@/state/nav-provider';
 
 const navLinks = [
-  { name: "Home", href: "/", icon: <IconHome className='w-5'/> },
+  { name: "Home", exact: true, href: "/", icon: <IconHome className='w-5'/> },
   { name: "Reservations", href: "/reservations", icon: <IconCalendar className='w-5'/> },
   { name: "Settings", href: "/settings", icon: <IconSettings className='w-5'/> },
 ];
@@ -17,10 +16,9 @@ const navLinks = [
 function SideNav() {
   const { isSideNavActive } = useNav()
   const pathname = usePathname()
-  const checkActive = (href: string) => {
+  const checkActive = (href: string, exact?: boolean) => {
     const dashboardHref = href == '/' ? '/dashboard' : `/dashboard${href}`
-    console.log({dashboardHref, pathname})
-    return pathname === dashboardHref
+    return exact ? pathname === dashboardHref : pathname.startsWith(dashboardHref)
   }
   return (
     <nav className={clsx(className.nav, isSideNavActive && className.active)}>
@@ -31,7 +29,7 @@ function SideNav() {
               href={'/dashboard' + link.href}
               className={clsx(
                 className.item,
-                checkActive(link.href) && className.active
+                checkActive(link.href, link.exact) && className.active
               )}
             >
               <span className='inline-block mb-1 align-middle me-2'>{link.icon}</span>

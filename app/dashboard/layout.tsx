@@ -1,11 +1,13 @@
 'use client'
 
-import Breadcrumb from "@/ui/breadcrumb";
-import SideNav from "../ui/sidenav";
-import Header from "@/ui/header";
-import { useNav } from "@/state/nav-provider";
 import clsx from "clsx";
-import BottomNav from "@/ui/bottomnav";
+import CustomScrollbar from "custom-react-scrollbar";
+
+import BottomNav from "@/components/BottomNav";
+import Breadcrumb from "@/components/BreadCrumb";
+import Header from "@/components/Header";
+import SideNav from "@/components/SideNav";
+import { useNav } from "@/state/nav-state";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isSideNavActive } = useNav()
@@ -14,14 +16,16 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       <SideNav/>
       <Header/>
       <BottomNav/>
-      <div className={clsx("pt-20", isSideNavActive && "sm:pl-[250px]" )}>
-        <div className="flex p-1 mx-3 rounded-lg md:hidden">
-          <Breadcrumb/>
+      <CustomScrollbar className="h-[100vh] w-full" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} >
+        <div className={clsx("pt-20", isSideNavActive && "sm:pl-[250px]" )}>
+          <div className="flex p-1 mx-3 rounded-lg md:hidden">
+            <Breadcrumb/>
+          </div>
+          <div className="px-4 py-2">
+            {children}
+          </div>
         </div>
-        <div className="px-4 py-2">
-          {children}
-        </div>
-      </div>
+      </CustomScrollbar>
     </main>
   );
 }

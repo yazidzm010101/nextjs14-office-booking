@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.19",
     "@prisma/client": "^5.12.1",
     "@tabler/icons": "^3.1.0",
     "@tabler/icons-react": "^3.2.0",
@@ -40,7 +41,7 @@
     "typescript": "^5.4.4"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} app/db/seed.ts",
-    "schema": "app/db/schema.prisma"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} app/_lib/db/seed.ts",
+    "schema": "app/_lib/db/schema.prisma"
   }
 }

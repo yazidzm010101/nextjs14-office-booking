@@ -1,9 +1,5 @@
-import { capitalize } from '@/lib/utils/formatUtils'
-import { faker } from '@faker-js/faker'
-import clsx from 'clsx'
 import Link from 'next/link'
-import React from 'react'
-import SettingItem from './setting-item'
+import SettingItem from './SettingItem'
 
 const settings: Record<string, any>[] = [
   {
@@ -11,14 +7,9 @@ const settings: Record<string, any>[] = [
     descriptor: <span>Dark</span>
   },
   {
-    name: "Offices Management",
-    descriptor: <Link href={"#"}>Add or update office list</Link>
+    name: "Master Data",
+    descriptor: <Link href={"settings/offices"}>Manage office and rooms data</Link>
   },
-  {
-    name: "Rooms Management",
-    descriptor: <Link href={"#"}>Add or update office list</Link>
-  },
-
   {
     name: "User Management",
     descriptor: <Link href={"#"}>Add or update user list</Link>

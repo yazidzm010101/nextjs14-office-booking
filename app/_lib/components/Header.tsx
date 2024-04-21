@@ -1,14 +1,12 @@
 "use client";
 
+import { useNav } from "@/state/nav-state";
 import { IconMenu2 } from "@tabler/icons-react";
-import CustomScrollbar from "custom-react-scrollbar";
-import { useCallback, useEffect, useRef, useState } from "react";
-import Breadcrumb from "./breadcrumb";
-// import style then
-import { useNav } from "@/state/nav-provider";
 import clsx from "clsx";
-import "custom-react-scrollbar/dist/style.css";
+import CustomScrollbar from "custom-react-scrollbar";
 import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Breadcrumb from "@/components/BreadCrumb";
 
 function Header() {
   const { isSideNavActive, toggleSideNav } = useNav();
@@ -24,14 +22,21 @@ function Header() {
   );
 
   const handleScroll = () => {
-    const positionY =
-      document.body.scrollTop || document.documentElement.scrollTop;
+    const main = document.querySelector("main .scrollbar__scroller");
+    if (main) {
+      console.log(main);
+    }
+    const positionY = main?.scrollTop || 0;
     setFloating(positionY > 0);
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const main = document.querySelector("main .scrollbar__scroller");
+    if (main) {
+      console.log(main);
+      main.addEventListener("scroll", handleScroll, { passive: true });
+      return () => main.removeEventListener("scroll", handleScroll);
+    }
   }, []);
 
   useEffect(() => {
@@ -43,7 +48,7 @@ function Header() {
   return (
     <nav
       className={clsx(
-        "fixed top-0 right-[250px] px-2 py-2 transition-all duration-300 w-full left-0",
+        "fixed z-10 top-0 right-[250px] px-2 py-2 transition-all duration-300 w-full left-0",
         isSideNavActive
           ? "sm:left-[250px] sm:w-[calc(100%-250px)]"
           : "sm:w-full"

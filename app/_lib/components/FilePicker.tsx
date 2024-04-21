@@ -6,17 +6,22 @@ import {
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
+import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import getURL from "../lib/utils/getURL";
-import { fileSize } from "../lib/utils/formatUtils";
+import { fileSize } from "@/utils/text-utils";
+import getURL from "@/utils/text-utils";
 
 function FilePicker({
   onChange,
   name,
+  id,
+  className,
 }: {
   onChange?: (fileURL: string) => void;
   name: string;
+  id: string;
+  className?: string;
 }) {
   const [file, setFile] = useState<any>();
   const [fileName, setFileName] = useState("");
@@ -28,6 +33,8 @@ function FilePicker({
   const [message, setMessage] = useState("");
   const [req, setReq] = useState<XMLHttpRequest | undefined>();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // console.log({inputRef})
 
   // this handle process to upload file into the server
   const uploadFile = () => {
@@ -44,7 +51,6 @@ function FilePicker({
       const files = inputRef?.current?.files || [];
       const file = files[0];
 
-      
       if (!!file) {
         const fileExt = file.name.split(".").slice(-1)[0];
         const fileType = fileTypeMap.find((fileType) =>
@@ -84,22 +90,22 @@ function FilePicker({
             setStatus("error");
             setMessage(response.message);
           }
-          setReq(undefined)
+          setReq(undefined);
         };
 
         xhr.onerror = function () {
           setStatus("error");
           setMessage(this.statusText);
-          setReq(undefined)
+          setReq(undefined);
         };
         xhr.onabort = function () {
           setStatus("idle");
           setLoaded(0);
           setMessage("");
-          setReq(undefined)
+          setReq(undefined);
         };
 
-        setReq(xhr)
+        setReq(xhr);
         xhr.send(formData);
       }
     }
@@ -114,7 +120,7 @@ function FilePicker({
       setFile(null);
       setLoaded(0);
       setMessage("");
-      req?.abort()
+      req?.abort();
     }
   };
 
@@ -125,11 +131,17 @@ function FilePicker({
   }, [fileURL]);
 
   return (
-    <div className="relative w-full flex items-center flex-nowrap max-w-sm bg-opacity-50 border border-black rounded-md border-opacity-[0.025] shadow-sm overflow-clip bg-gray-50">
+    <div
+      className={clsx(
+        "relative flex items-center flex-nowrap bg-opacity-50 border border-black rounded-md border-opacity-[0.025] shadow-sm overflow-clip bg-gray-50 dark:bg-white/10",
+        className
+      )}
+    >
       {!fileURL ? (
-        <button
+        <label
+          htmlFor={id}
           className="flex items-center self-stretch flex-grow overflow-hidden"
-          onClick={() => inputRef.current?.click()}
+          // onClick={() => inputRef.current?.click()}
         >
           {/* DISPLAY FILE-TYPE ICON */}
           {fileType && (
@@ -138,27 +150,35 @@ function FilePicker({
             </div>
           )}
           <div className="flex flex-col self-stretch justify-center flex-grow px-3 overflow-hidden text-sm text-gray-600">
-          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-start text-nowrap">
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap text-start text-nowrap dark:text-white ">
               {fileName || "Upload a file"}
             </div>
             <div className="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-start text-nowrap">
-            {status == "error" && (
-              <span className="text-red-900 ">{message}</span>
-            )}
-            {status == "loading" && (
-              <span className="text-xs text-gray-400 ">{fileSize(loaded)}/{fileSize(total)}</span>
-            )}
-            {status == "idle" && !fileURL &&  (
-              <span className="text-xs text-gray-400 ">Allowed file: .jpg, .jpeg, .png, .pdf</span>
-            )}
-            {status == "idle" && fileURL && (
-              <span className="text-xs text-gray-400 ">{ fileURL }</span>
-            )}
+              {status == "error" && (
+                <span className="text-red-900 ">{message}</span>
+              )}
+              {status == "loading" && (
+                <span className="text-xs text-gray-400 ">
+                  {fileSize(loaded)}/{fileSize(total)}
+                </span>
+              )}
+              {status == "idle" && !fileURL && (
+                <span className="text-xs text-gray-400 ">
+                  Allowed file: .jpg, .jpeg, .png, .pdf
+                </span>
+              )}
+              {status == "idle" && fileURL && (
+                <span className="text-xs text-gray-400 ">{fileURL}</span>
+              )}
             </div>
           </div>
-        </button>
+        </label>
       ) : (
-        <Link className="flex items-center self-stretch flex-grow overflow-hidden" href={fileURL} target="_blank">
+        <Link
+          className="flex items-center self-stretch flex-grow max-w-full overflow-hidden"
+          href={fileURL}
+          target="_blank"
+        >
           {/* DISPLAY FILE-TYPE ICON */}
           {fileType && (
             <div className="flex-shrink-0 flex items-center justify-center self-stretch p-0.5 w-12 bg-green-100 text-green-600 border-r border-green-200">
@@ -170,18 +190,22 @@ function FilePicker({
               {fileName}
             </div>
             <div className="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-start text-nowrap">
-            {status == "error" && (
-              <span className="text-red-900 ">{message}</span>
-            )}
-            {status == "loading" && (
-              <span className="text-xs text-gray-400 ">{fileSize(loaded)}/{fileSize(total)}</span>
-            )}
-            {status == "idle" && !fileURL &&  (
-              <span className="text-xs text-gray-400 ">Allowed file: .jpg, .jpeg, .png, .pdf</span>
-            )}
-            {status == "idle" && fileURL && (
-              <span className="text-xs text-gray-400 ">{ fileURL }</span>
-            )}
+              {status == "error" && (
+                <span className="text-red-900 ">{message}</span>
+              )}
+              {status == "loading" && (
+                <span className="text-xs text-gray-400 ">
+                  {fileSize(loaded)}/{fileSize(total)}
+                </span>
+              )}
+              {status == "idle" && !fileURL && (
+                <span className="text-xs text-gray-400 ">
+                  Allowed file: .jpg, .jpeg, .png, .pdf
+                </span>
+              )}
+              {status == "idle" && fileURL && (
+                <span className="text-xs text-gray-400 ">{fileURL}</span>
+              )}
             </div>
           </div>
         </Link>
@@ -190,8 +214,11 @@ function FilePicker({
       {/* UPLOAD BUTTON, IF ERROR WILL RE-UPLOAD INSTEAD PICK A FILE */}
       {status != "loading" && !fileURL && (
         <button
+          type="button"
           className="m-2 text-gray-600 flex-shrink-0 w-8 h-8 p-0.5 rounded-full border flex items-center justify-center"
-          onClick={() => status != "error" && inputRef?.current?.click() || uploadFile() }
+          onClick={() =>
+            (status != "error" && inputRef?.current?.click()) || uploadFile()
+          }
         >
           <IconUpload className="w-full" />
         </button>
@@ -199,6 +226,7 @@ function FilePicker({
       {/* THIS BUTTON WILL CANCEL THE UPLOAD AND CLEAR IT */}
       {!!fileName && (
         <button
+          type="button"
           className="m-2 text-gray-600 flex-shrink-0 w-8 h-8 p-0.5 rounded-full border flex items-center justify-center"
           onClick={clearFile}
         >
@@ -214,6 +242,7 @@ function FilePicker({
         )}
       </div>
       <input
+        id={id}
         style={{ display: "none" }}
         aria-hidden
         type="file"
@@ -227,7 +256,7 @@ function FilePicker({
         name={name}
         type="text"
         readOnly
-        value={fileName}
+        value={fileURL}
       />
     </div>
   );
