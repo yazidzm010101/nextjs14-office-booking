@@ -61,3 +61,76 @@ export async function addOffice(
     success: true,
   };
 }
+
+export async function editOffice(
+  id: string,
+  _prevState: OfficeState | undefined,
+  formData: FormData
+) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const validatedFields = OfficeFormSchema.omit({ id: true }).safeParse({
+    name: formData.get("name"),
+    address: formData.get("address"),
+    description: formData.get("description"),
+    room_duration_min: formData.get("room_duration_min"),
+    room_duration_max: formData.get("room_duration_max"),
+    photo: formData.get("photo"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Please fill out the form properly.",
+    };
+  }
+
+  const newData = validatedFields.data;
+  const oldOffice = await prisma.office.findFirst({where: {id}})
+  console.log({data: { ...oldOffice, ...newData }})
+  const office = await prisma.office.update({
+    where: { id },
+    data: { ...oldOffice, ...newData }
+  });
+
+  revalidatePath("/dashboard/settings/offices/edit?id=" + id);
+
+  return {
+    message: `Office succesfully updated`,
+    data: office,
+    success: true,
+  };
+}
+
+export async function editOfficePhoto(
+  id: string,
+  _prevState: OfficeState | undefined,
+  formData: FormData
+) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const validatedFields = OfficeFormSchema.pick({photo: true}).safeParse({
+    photo: formData.get("photo"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Please fill out the form properly.",
+    };
+  }
+
+  const newData = validatedFields.data;
+  const oldOffice = await prisma.office.findFirst({where: {id}})
+  console.log({data: { ...oldOffice, ...newData }})
+  const office = await prisma.office.update({
+    where: { id },
+    data: { ...oldOffice, ...newData }
+  });
+
+  revalidatePath("/dashboard/settings/offices/edit?id=" + id);
+
+  return {
+    message: `Office succesfully updated`,
+    data: office,
+    success: true,
+  };
+}

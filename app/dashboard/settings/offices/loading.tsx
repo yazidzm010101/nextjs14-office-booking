@@ -4,15 +4,13 @@ function Loading() {
     skeletons.push(
       <li
         key={i}
-        className={
-          "flex w-full rounded-lg overflow-clip dark:bg-gray-800 transition-all duration-75 shimmer"
-        }
+        className="flex flex-col rounded-lg outline outline-1 outline-transparent xs:flex-row overflow-clip bg-white/5 shimmer"
       >
-        <div className="w-24 bg-white aspect-square bg-opacity-5" />
-        <div className="flex flex-col flex-grow mx-3 my-2">
-          <div className="w-full h-8 max-w-sm bg-white rounded-lg bg-opacity-5" />
-          <div className="w-full h-4 mt-1 bg-white rounded-lg bg-opacity-5" />
-          <div className="w-full h-4 max-w-md mt-1 bg-white rounded-lg bg-opacity-5" />
+        <div className="flex-shrink-0 object-cover w-full xs:w-36 aspect-video xs:aspect-square bg-white/20 shimmer" />
+        <div className="flex flex-col flex-grow gap-2 mx-4 my-3 text-gray-200">
+          <div className="w-full h-12 rounded-lg bg-white/20 shimmer" />
+          <div className="w-full h-5 max-w-sm rounded-lg bg-white/20 shimmer" />
+          <div className="w-full h-5 max-w-xs rounded-lg bg-white/20 shimmer" />
         </div>
       </li>
     );
@@ -24,7 +22,9 @@ function Loading() {
           Offices
         </h2>
       </div>
-      <ul className="flex flex-col gap-3">{skeletons}</ul>
+      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {skeletons}
+      </ul>
     </section>
   );
 }

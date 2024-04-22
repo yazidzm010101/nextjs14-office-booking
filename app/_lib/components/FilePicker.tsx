@@ -133,14 +133,14 @@ function FilePicker({
   return (
     <div
       className={clsx(
-        "relative flex items-center flex-nowrap bg-opacity-50 border border-black rounded-md border-opacity-[0.025] shadow-sm overflow-clip bg-gray-50 dark:bg-white/10",
+        "relative grid grid-cols-[1fr_auto] items-center flex-nowrap bg-opacity-50 border border-black rounded-md border-opacity-[0.025] shadow-sm overflow-clip bg-gray-50 dark:bg-white/10",
         className
       )}
     >
       {!fileURL ? (
         <label
           htmlFor={id}
-          className="flex items-center self-stretch flex-grow overflow-hidden"
+          className="flex items-center self-stretch flex-grow w-full row-span-1 row-start-1 overflow-hidden"
           // onClick={() => inputRef.current?.click()}
         >
           {/* DISPLAY FILE-TYPE ICON */}
@@ -175,7 +175,7 @@ function FilePicker({
         </label>
       ) : (
         <Link
-          className="flex items-center self-stretch flex-grow max-w-full overflow-hidden"
+          className="flex items-center self-stretch flex-grow max-w-full row-span-1 row-start-1 overflow-hidden"
           href={fileURL}
           target="_blank"
         >
@@ -211,53 +211,56 @@ function FilePicker({
         </Link>
       )}
 
-      {/* UPLOAD BUTTON, IF ERROR WILL RE-UPLOAD INSTEAD PICK A FILE */}
-      {status != "loading" && !fileURL && (
-        <button
-          type="button"
-          className="m-2 text-gray-600 flex-shrink-0 w-8 h-8 p-0.5 rounded-full border flex items-center justify-center"
-          onClick={() =>
-            (status != "error" && inputRef?.current?.click()) || uploadFile()
-          }
-        >
-          <IconUpload className="w-full" />
-        </button>
-      )}
-      {/* THIS BUTTON WILL CANCEL THE UPLOAD AND CLEAR IT */}
-      {!!fileName && (
-        <button
-          type="button"
-          className="m-2 text-gray-600 flex-shrink-0 w-8 h-8 p-0.5 rounded-full border flex items-center justify-center"
-          onClick={clearFile}
-        >
-          <IconX className="w-full" />
-        </button>
-      )}
-      <div className="absolute bottom-0 left-0 w-full">
-        {status == "loading" && (
-          <div
-            className="h-1 bg-green-900"
-            style={{ width: (loaded / total) * 98 + "%" }}
-          />
+      <div className="row-span-1 row-start-1">
+
+        {/* UPLOAD BUTTON, IF ERROR WILL RE-UPLOAD INSTEAD PICK A FILE */}
+        {status != "loading" && !fileURL && (
+          <button
+            type="button"
+            className="m-2 text-gray-600 flex-shrink-0 w-8 h-8 p-0.5 rounded-full border flex items-center justify-center"
+            onClick={() =>
+              (status != "error" && inputRef?.current?.click()) || uploadFile()
+            }
+          >
+            <IconUpload className="w-full" />
+          </button>
         )}
+        {/* THIS BUTTON WILL CANCEL THE UPLOAD AND CLEAR IT */}
+        {!!fileName && (
+          <button
+            type="button"
+            className="m-2 text-gray-600 flex-shrink-0 w-8 h-8 p-0.5 rounded-full border flex items-center justify-center"
+            onClick={clearFile}
+          >
+            <IconX className="w-full" />
+          </button>
+        )}
+        <div className="absolute bottom-0 left-0 w-full">
+          {status == "loading" && (
+            <div
+              className="h-1 bg-green-900"
+              style={{ width: (loaded / total) * 98 + "%" }}
+            />
+          )}
+        </div>
+        <input
+          id={id}
+          style={{ display: "none" }}
+          aria-hidden
+          type="file"
+          name="file"
+          ref={inputRef}
+          onChange={uploadFile}
+        />
+        <input
+          style={{ display: "none" }}
+          aria-hidden
+          name={name}
+          type="text"
+          readOnly
+          value={fileURL}
+        />
       </div>
-      <input
-        id={id}
-        style={{ display: "none" }}
-        aria-hidden
-        type="file"
-        name="file"
-        ref={inputRef}
-        onChange={uploadFile}
-      />
-      <input
-        style={{ display: "none" }}
-        aria-hidden
-        name={name}
-        type="text"
-        readOnly
-        value={fileURL}
-      />
     </div>
   );
 }

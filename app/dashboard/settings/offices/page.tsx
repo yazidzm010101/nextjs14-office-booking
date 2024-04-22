@@ -1,6 +1,7 @@
 import { getOffices, getOfficesPagesCount } from "@/data/offices";
 import { IconMap2 } from "@tabler/icons-react";
 import Image from "next/image";
+import Link from "next/link";
 import AddOffice from "./AddOffice";
 
 async function Offices({
@@ -23,34 +24,38 @@ async function Offices({
           Offices
         </h2>
       </div>
-      <ul className="flex flex-col gap-3">
+      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
         {offices.map((item, i) => (
-          <li
-            key={i}
-            className="flex flex-col transition-all duration-200 rounded-lg outline outline-1 outline-transparent hover:outline-emerald-600 sm:flex-row overflow-clip dark:bg-gray-800"
-          >
-            <Image
-              alt={`${item.name} photo`}
-              width={200}
-              height={200}
-              placeholder="blur"
-              blurDataURL="/placeholder-image.webp"
-              className="flex-shrink-0 object-cover w-full sm:w-24 md:w-36 aspect-video sm:aspect-square"
-              src={
-                item.photo ||
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXpYBvB9NK7nv3Bvw__8l9xz0zur9ZwgensBDcw1pDNw&s"
-              }
-            />
-            <div className="flex-col flex-grow mx-4 my-3 text-gray-200">
-              <h5 className="text-xl">{item.name}</h5>
-              <p>
-                <span className="inline-block align-middle opacity-80 me-1">
-                  <IconMap2 className="w-5" />
-                </span>
-                <span className="align-middle opacity-80">{item.address}</span>
-              </p>
-              <p className="mt-3 text-sm opacity-60">{item.description}</p>
-            </div>
+          <li key={i}>
+            <Link
+              href={"/dashboard/settings/offices/edit?id=" + item.id}
+              className="flex flex-col transition-all duration-200 rounded-lg outline outline-1 outline-transparent hover:outline-emerald-600 xs:flex-row overflow-clip dark:bg-gray-800"
+            >
+              <Image
+                alt={`${item.name} photo`}
+                width={200}
+                height={200}
+                placeholder="blur"
+                blurDataURL="/placeholder-image.webp"
+                className="flex-shrink-0 object-cover w-full xs:w-36 aspect-video xs:aspect-square"
+                src={
+                  item.photo ||
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXpYBvB9NK7nv3Bvw__8l9xz0zur9ZwgensBDcw1pDNw&s"
+                }
+              />
+              <div className="flex-col flex-grow mx-4 my-3 text-gray-200">
+                <h5 className="text-xl">{item.name}</h5>
+                <p>
+                  <span className="inline-block align-middle opacity-80 me-1">
+                    <IconMap2 className="w-5" />
+                  </span>
+                  <span className="align-middle opacity-80">
+                    {item.address}
+                  </span>
+                </p>
+                <p className="mt-3 text-sm opacity-60">{item.description}</p>
+              </div>
+            </Link>
           </li>
         ))}
       </ul>

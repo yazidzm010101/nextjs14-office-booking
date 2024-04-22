@@ -1,7 +1,18 @@
-import clsx from "clsx";
-import { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
+"use client";
 
-interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
+import clsx from "clsx";
+import {
+  ReactNode,
+  TextareaHTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import autosize from "autosize";
+
+interface Props
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
   label?: string;
   size?: "sm" | "md" | "lg";
   wrapperClassName?: string;
@@ -17,6 +28,8 @@ function TextArea({
   size = "md",
   ...props
 }: Props) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
   const wrapper = (component: ReactNode) =>
     label ? (
       <fieldset
@@ -30,6 +43,13 @@ function TextArea({
     ) : (
       <>{component}</>
     );
+
+  useEffect(() => {
+    if (ref.current) {
+      autosize(ref.current);
+    }
+  }, [ref?.current]);
+
   return wrapper(
     <>
       {label && (
@@ -50,12 +70,15 @@ function TextArea({
         className={clsx(
           size == "sm" && "px-3 py-3 text-xs rounded-md",
           size == "md" && "px-3 py-3 text-sm rounded-lg",
-          size == "md" && "px-3 py-3 text-md rounded-xl",
-          "autofill:bg-white/20",
-          "text-white transition-all duration-75 bg-white/5 focus:border-0 focus:outline outline-transparent focus:outline-2 focus:outline-emerald-300",
+          size == "lg" && "px-3 py-3 text-md rounded-xl",
+          "autofill:bg-white/20 resize-none",
+          props.readOnly ? "bg-transparent hover:outline-emerald-300/25" : "bg-white/5 focus:outline-emerald-300",
+          "text-white transition-all duration-75 focus:border-0 focus:outline outline-transparent focus:outline-2",
           inputClassName
         )}
         {...props}
+        ref={ref}
+        rows={1}
       />
     </>
   );

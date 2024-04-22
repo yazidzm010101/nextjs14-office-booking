@@ -82,7 +82,7 @@ function Header() {
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
-          <Breadcrumb withAppName homeName="dashboard" />
+          <Breadcrumb homeName="dashboard" />
         </CustomScrollbar>
         <div className="flex items-center self-stretch justify-center my-1 -mr-3 text-white rounded-lg ms-auto bg-pink-950 aspect-square">
           YZ

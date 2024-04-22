@@ -1,6 +1,12 @@
 {
-    "editor.tabSize": 2,
-    "explorer.sortOrder": "type",
-    "explorer.sortOrderLexicographicOptions": "upper",
-    "editor.wordWrap": "on"
+  "editor.tabSize": 2,
+  "explorer.sortOrder": "type",
+  "explorer.sortOrderLexicographicOptions": "upper",
+  "editor.wordWrap": "on",
+  "tailwindCSS.experimental.classRegex": [
+    "clsx\\(([^)]*)\\)", 
+    "'([^']*)'",
+    "className\\: '([^']*)'",
+    "className\\: \"([^']*)\"",
+    ]
 }

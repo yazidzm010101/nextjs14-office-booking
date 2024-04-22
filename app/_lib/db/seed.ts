@@ -41,6 +41,9 @@ const offices = [
 ];
 
 async function main() {
+  await prisma.room.deleteMany();
+  await prisma.office.deleteMany();
+
   for (const { username, name, role, password } of users) {
     await prisma.user.upsert({
       where: { username },
@@ -53,8 +56,6 @@ async function main() {
       update: {},
     });
   }
-
-  await prisma.room.deleteMany();
 
   for (const j in offices) {
     const {

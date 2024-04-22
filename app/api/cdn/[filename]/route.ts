@@ -11,7 +11,20 @@ export async function GET(
   
   const fileExt = fileName.split(".").slice(-1)[0];
   const filePath = path.join(process.cwd(), "storage/" + fileName);
-  const file = fs.readFileSync(filePath);
+  
+  let file: Buffer;
+
+  try {
+    file = fs.readFileSync(filePath);
+  } catch (err) {
+    return Response.json(
+      {
+        message: "File not found!",
+        status: 404,
+      },
+      { status: 404 }
+    );
+  }
 
   if (file) {
     if (["jpg", "jpeg", "png"].includes(fileExt)) {
