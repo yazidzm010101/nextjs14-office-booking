@@ -1,6 +1,6 @@
 "use client";
 
-import { IconCheck, IconChevronLeft, IconPencil } from "@tabler/icons-react";
+import { IconAlphabetLatin, IconCheck, IconChevronLeft, IconClockMinus, IconClockPlus, IconMap, IconPencil, IconTextCaption } from "@tabler/icons-react";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -44,7 +44,7 @@ function ActionButtons({ isEdit, toggleEdit, setEdit }: any) {
       {isEdit && (
         <>
           <Button
-            onClick={() => setEdit(false)}
+            onClick={() => {setEdit(false)}}
             type="button"
             variant="secondary"
             disabled={pending}
@@ -144,6 +144,12 @@ function EditOffice({
     }
   }, [state]);
 
+  useEffect(() => {
+    if (isEdit == false) {
+      ref?.current?.reset();
+    }
+  }, [isEdit])
+
   return (
     <form className="my-3 mb-10" action={dispatch} ref={ref}>
       <ActionButtons
@@ -153,7 +159,7 @@ function EditOffice({
       />
       <div className="flex flex-wrap items-start gap-4 sm:flex-nowrap">
         <div
-          className={"w-full sm:w-48 md:w-52 relative aspect-square rounded-lg"}
+          className={"w-full sm:w-48 md:w-52 relative aspect-square rounded-lg flex-shrink-0"}
         >
           <EditOfficePhoto
             id={office.id}
@@ -169,10 +175,12 @@ function EditOffice({
         >
           <Input
             size="lg"
+            icon={<IconAlphabetLatin/>}
             readOnly={!isEdit}
             id="name"
             name="name"
-            inputClassName={clsx("font-bold text-xl -mt-2 col-span-12")}
+            wrapperClassName={clsx("col-span-12 -mt-2")}
+            inputClassName={clsx("text-gray-300")}
             placeholder="Enter the office name"
             required
             defaultValue={office?.name}
@@ -182,41 +190,46 @@ function EditOffice({
             id="address"
             name="address"
             size="lg"
+            icon={<IconMap/>}
             placeholder="Address"
-            inputClassName={clsx("text-gray-300 -mt-2 col-span-12")}
+            wrapperClassName={clsx("col-span-12 -mt-2")}
+            inputClassName={clsx("text-gray-300")}
             required
             defaultValue={office?.address}
           />
           <TextArea
             readOnly={!isEdit}
+            icon={<IconTextCaption/>}
             id="description"
             name="description"
             size="lg"
             placeholder="Description"
-            inputClassName={clsx("text-gray-300 -mt-2 col-span-12")}
+            wrapperClassName={clsx("col-span-12 -mt-2")}
+            inputClassName={clsx("text-gray-300")}
             required
             defaultValue={office?.description}
           />
           <div className="flex flex-wrap col-span-12 md:col-span-6 md:flex-nowrap">
-            <div className="flex-grow -mt-2">
-              <Input
-                size="lg"
-                id="room_duration_min"
-                name="room_duration_min"
-                type="text"
-                readOnly={!isEdit}
-                onChange={(e) => setTimeMinVal(e.target.value)}
-                defaultValue={office?.room_duration_min}
-                validator={timeValidator}
-              />
-            </div>
+            <Input
+              size="lg"
+              id="room_duration_min"
+              name="room_duration_min"
+              type="text"
+              readOnly={!isEdit}
+              icon={<IconClockMinus/>}
+              wrapperClassName="flex-grow -mt-2"
+              onChange={(e) => setTimeMinVal(e.target.value)}
+              defaultValue={office?.room_duration_min}
+              validator={timeValidator}
+            />
             <div className="items-center justify-center flex-shrink-0 hidden px-4 text-lg font-bold text-gray-300 md:block w-fit">
               <span>-</span>
             </div>
-            <div className="flex-grow -mt-2">
               <Input
                 size="lg"
                 required
+                icon={<IconClockPlus/>}
+                wrapperClassName="flex-grow -mt-2"
                 id="room_duration_max"
                 name="room_duration_max"
                 readOnly={!isEdit}
@@ -226,7 +239,6 @@ function EditOffice({
                   timeValidator(value) || timeMaxValidator(value)
                 }
               />
-            </div>
           </div>
         </div>
       </div>

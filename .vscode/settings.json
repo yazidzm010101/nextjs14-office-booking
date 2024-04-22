@@ -4,9 +4,25 @@
   "explorer.sortOrderLexicographicOptions": "upper",
   "editor.wordWrap": "on",
   "tailwindCSS.experimental.classRegex": [
-    "clsx\\(([^)]*)\\)", 
-    "'([^']*)'",
+    "clsx\\(([^)]*)\\)",
     "className\\: '([^']*)'",
-    "className\\: \"([^']*)\"",
-    ]
+    "className\\: \"([^']*)\""
+  ],
+
+  "material-icon-theme.folders.associations": {
+    "_lib": "functions",
+    "actions": "server",
+    "sample": "dist",
+    "state": "context",
+    "utils": "tools",
+    "data": "mappings",
+    "db": "database",
+    "components": "react-components",
+    "api": "api",
+    "app": "src",
+    "public": "public",
+    "storage": "download",
+  },
+  "material-icon-theme.hidesExplorerArrows": true,
+  "material-icon-theme.folders.theme": "classic"
 }

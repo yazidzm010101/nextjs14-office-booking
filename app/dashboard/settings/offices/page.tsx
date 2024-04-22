@@ -59,10 +59,10 @@ async function Offices({
           </li>
         ))}
       </ul>
-      <ul className=""></ul>
+      {/* <ul className=""></ul>
       <p className="mt-4 dark:text-gray-300 text-end">
         {page} of {totalPages} pages
-      </p>
+      </p> */}
       <AddOffice />
     </section>
   );

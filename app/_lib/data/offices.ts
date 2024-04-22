@@ -4,7 +4,7 @@ import prisma from "@/db/prisma";
 
 export async function getOffices(
   currentPage: number = 1,
-  itemPerPage: number = 10
+  itemPerPage: number = 999
 ) {
   await new Promise((resolve) => setTimeout(resolve, 5000));
   const offices = await prisma.office.findMany({
@@ -14,7 +14,7 @@ export async function getOffices(
   return offices;
 }
 
-export async function getOfficesPagesCount(itemPerPage: number = 10) {
+export async function getOfficesPagesCount(itemPerPage: number = 999) {
   const count = await prisma.office.count();
   return Math.ceil(count / itemPerPage);
 }

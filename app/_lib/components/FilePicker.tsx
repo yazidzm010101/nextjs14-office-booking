@@ -17,16 +17,18 @@ function FilePicker({
   name,
   id,
   className,
+  defaultValue,
 }: {
   onChange?: (fileURL: string) => void;
   name: string;
   id: string;
   className?: string;
+  defaultValue?: string;
 }) {
   const [file, setFile] = useState<any>();
   const [fileName, setFileName] = useState("");
   const [fileType, setFileType] = useState<any>(null);
-  const [fileURL, setFileURL] = useState("");
+  const [fileURL, setFileURL] = useState(defaultValue || '');
   const [total, setTotal] = useState<number>(0);
   const [loaded, setLoaded] = useState<number>(0);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -126,6 +128,26 @@ function FilePicker({
 
   useEffect(() => {
     if (fileURL) {
+      
+      const fileTypeMap = [
+        {
+          type: "Image",
+          extensions: "jpg|jpeg|png",
+          icon: <IconPhoto />,
+        },
+        { type: "Document", extensions: "pdf", icon: <IconPaperclip /> },
+      ];
+
+      const fileExt = fileURL.split(".").slice(-1)[0];
+      const fileType = fileTypeMap.find((fileType) =>
+        fileExt.match(new RegExp(fileType.extensions))
+      );
+      setFileType(fileType);
+
+      if (!fileName) {
+        setFileName(fileURL)
+      }
+
       onChange && onChange(fileURL);
     }
   }, [fileURL]);

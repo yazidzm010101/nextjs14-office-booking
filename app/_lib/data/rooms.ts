@@ -5,7 +5,7 @@ import prisma from "@/db/prisma";
 export async function getRoomsByOfficeId(
   officeId?: string,
   currentPage: number = 1,
-  itemPerPage: number = 10
+  itemPerPage: number = 999
 ) {
   if (!officeId) {
     return [];
@@ -24,7 +24,7 @@ export async function getRoomsByOfficeId(
 
 export async function getRoomsByOfficeIdPagesCount(
   officeId?: string,
-  itemPerPage: number = 10
+  itemPerPage: number = 999
 ) {
   if (!officeId) {
     return null;

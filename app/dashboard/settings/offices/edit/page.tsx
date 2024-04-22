@@ -1,9 +1,9 @@
 import React from 'react'
 import EditOffice from './EditOffice'
-import RoomList from './RoomList'
+import ListRoom from './ListRoom'
 import { getOfficeById } from '~/_lib/data/offices';
 
-async function page({searchParams}: { searchParams: {id:string} }) {
+async function page({searchParams}: { searchParams: {id:string, page: string} }) {
   const office = await getOfficeById(searchParams.id );
   
   if (!office) {
@@ -13,7 +13,7 @@ async function page({searchParams}: { searchParams: {id:string} }) {
   return (
     <>
       <EditOffice office={office}/>
-      <RoomList officeId={searchParams.id}/>
+      <ListRoom searchParams={searchParams} office={office}/>
     </>
   )
 }

@@ -1,14 +1,14 @@
 "use client";
 
-import { addOffice } from "@/actions/office";
 import Button from "@/components/Button";
 import FilePicker from "@/components/FilePicker";
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
 import { Dialog, Transition } from "@headlessui/react";
-import { IconAlphabetLatin, IconClockMinus, IconClockPlus, IconLocation, IconMap, IconMap2, IconPlus, IconTextCaption, IconTimeDuration0 } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { addRoom } from "~/_lib/actions/room";
 import { useToast } from "~/_lib/state/toast-state";
 
 function SubmitButton() {
@@ -20,66 +20,22 @@ function SubmitButton() {
   );
 }
 
-function AddOffice() {
-  const [shown, setShown] = useState(false);
+function AddRoom({
+  officeName,
+  officeId,
+}: {
+  officeName: string;
+  officeId: string;
+}) {
   const ref = useRef<HTMLFormElement>(null);
+
+  const [shown, setShown] = useState(false);
 
   const onClose = () => setShown(false);
   const onOpen = () => setShown(true);
-
-  const [state, dispatch] = useFormState(addOffice, undefined);
-  const [timeMinVal, setTimeMinVal] = useState("");
-
-  const timeStrToMs = (value: string) => {
-    let matches =
-      /^([0-9]+h(?:\s)){0,1}([0-9]+m(?:\s){0,1}){0,1}$/g
-        .exec(value + " ")
-        ?.slice(1)
-        .reduce((store: string[], value: any) => {
-          if (!!value && typeof value == "string" && !store.includes(value)) {
-            store.push(value);
-          }
-          return store;
-        }, []) || [];
-    console.log({ matches });
-    let time_ms = 0;
-    matches.forEach((x) => {
-      if (x.includes("h")) {
-        time_ms += Number((x.match(/[0-9]+/g) || [])[0] || 0) * 3600 * 1000;
-      } else if (x.includes("m")) {
-        time_ms += Number((x.match(/[0-9]+/g) || [])[0] || 0) * 60 * 1000;
-      }
-    });
-    return time_ms;
-  };
-
-  const timeValidator = (value: string) => {
-    const matches =
-      /^([0-9]+h(?:\s)){0,1}([0-9]+m(?:\s){0,1}){0,1}$/g
-        .exec(value + " ")
-        ?.filter((x) => !!x) || [];
-    const minuteValid = matches.reduce((store, x) => {
-      if (x.includes("m")) {
-        store = Number((x.match(/[0-9]+/g) || [])[0] || 0) <= 59;
-      }
-      return store;
-    }, true);
-    return (
-      (matches.length == 0 && `Example valid format: "1h", "2h 3m" or "4m"`) ||
-      (!minuteValid && "Maximum minute is 59") ||
-      ""
-    );
-  };
-
-  const timeMaxValidator = (value: string) => {
-    const isValid =
-      timeStrToMs(value) > timeStrToMs(timeMinVal)
-        ? ""
-        : "Max duration can't be smaller than min duration";
-    return isValid;
-  };
-
   const { showToast } = useToast();
+
+  const [state, dispatch] = useFormState(addRoom, undefined);
 
   useEffect(() => {
     if (state?.success == true) {
@@ -87,7 +43,7 @@ function AddOffice() {
       onClose();
       showToast({
         type: "success",
-        message: `Success adding new office "${state?.data?.name}"!`,
+        message: `Success adding new room "${state?.data?.name}"!`,
         title: "Success",
       });
     }
@@ -103,7 +59,7 @@ function AddOffice() {
           icon={<IconPlus />}
           onClick={() => onOpen()}
         >
-          Add Office
+          Add Room
         </Button>
       </div>
       <Transition appear show={shown} as={Fragment}>
@@ -137,55 +93,48 @@ function AddOffice() {
                     as="h3"
                     className="text-xl font-medium leading-6 dark:text-gray-300"
                   >
-                    Add new office
+                    Add new room
                   </Dialog.Title>
                   <form
                     className="grid grid-cols-12 gap-4 mt-8"
                     action={dispatch}
                     ref={ref}
                   >
-                    <Input icon={<IconAlphabetLatin/>} wrapperClassName="col-span-12" label="Name" id="name" name="name" type="text" />
-                    <TextArea icon={<IconMap2/>}  wrapperClassName="col-span-12" label="Address" id="address" name="address" />
-                    
+                    <fieldset className="flex flex-col w-full max-w-full col-span-12 gap-1">
+                      <input
+                        type="hidden"
+                        id="office_id"
+                        name="office_id"
+                        value={officeId}
+                      />
+                      <Input
+                        label="Office"
+                        id="office"
+                        disabled
+                        type="text"
+                        defaultValue={officeName}
+                      />
+                    </fieldset>
+                    <fieldset className="flex flex-col w-full max-w-full col-span-12 gap-1">
+                      <Input label="Name" id="name" name="name" type="text" />
+                    </fieldset>
                     <fieldset className="flex flex-col w-full max-w-full col-span-12 gap-1">
                       <label htmlFor="photo" className="dark:text-gray-400">
                         Photo
                       </label>
                       <FilePicker
-                        id="photo"
+                        id="photo-room"
                         name="photo"
                         className="w-full max-w-full"
                       />
                     </fieldset>
+                    <fieldset className="flex flex-col w-full max-w-full col-span-12 gap-1">
                       <TextArea
                         label="Description"
                         id="description"
                         name="description"
-                        wrapperClassName="col-span-12"
-                        icon={<IconTextCaption/>}
                       />
-                    <Input
-                      label="Min. duration"
-                      id="room_duration_min"
-                      name="room_duration_min"
-                      type="text"
-                      wrapperClassName="col-span-12 md:col-span-6"
-                      onChange={(e) => setTimeMinVal(e.target.value)}
-                      validator={timeValidator}
-                      icon={<IconClockMinus/>}
-                    />
-                    <Input
-                      required
-                      label="Max. duration"
-                      id="room_duration_max"
-                      name="room_duration_max"
-                      type="text"
-                      wrapperClassName="col-span-12 md:col-span-6"
-                      validator={(value) =>
-                        timeValidator(value) || timeMaxValidator(value)
-                      }
-                    icon={<IconClockPlus/>}
-                    />
+                    </fieldset>
                     <div className="flex justify-end col-span-12 gap-2 mt-4">
                       <Button
                         type="button"
@@ -207,4 +156,4 @@ function AddOffice() {
   );
 }
 
-export default AddOffice;
+export default AddRoom;
